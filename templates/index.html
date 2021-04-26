@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>PPFR_前端</title>
+    <!--css-links-->
+    <link href="static/css/style.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="static/css/font-awesome.min.css" rel="stylesheet" type="text/css" media="all">
+    <script src="/static/js/jquery.min.js"></script>
+    <!--//css-links-->
+    <!--meta-tags-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="Simple Statistics Responsive Widget,Login form widgets, Sign up Web forms , Login signup Responsive web form,Flat Pricing table,Flat Drop downs,Registration Forms,News letter Forms,Elements" />
+ 
+
+</head>
+<body>
+    <h1>PPFR 认证&注册</h1>
+    <!-- main-section -->
+    <div class="head agile">
+        <div class="logo">
+            <div class="logo-top wel">
+                <img src="static/images/pic2.jpg" alt="image" />
+                <h2>欢迎</h2>
+                <br>
+                <h2>
+                    <label align="center" class="radio">
+                         <button onclick="take()" type="button" style="background-color: rgba(255,255,255,0);color: #EBECEE;width: 80px;height: 20px; border: 0px;">
+                                <font size="4"><b>认证</b></font>
+                            </button></label>
+                </h2>
+                <br>
+                <h2>
+                    <label align="center" class="radio">
+                         <button type="button" style="background-color: rgba(255,255,255,0);color: #EBECEE;width: 80px;height: 20px; border: 0px;">
+                                <font size="4"><b>注册</b></font>
+                            </button></label>
+                </h2>
+
+            </div>
+
+        </div>
+        <canvas hidden id="canvas" width="640" height="480"></canvas>
+        <div class="login w3">
+            <video id="video" width="422" height="326" autoplay="autoplay"></video>
+            <!--拍照按钮-->
+            <!--描绘video截图-->
+
+            <script>
+                let mediaStreamTrack=null; // 视频对象(全局)
+                let video ;
+
+                let constraints = {
+                    video: { width: 640, height: 480 },
+                    audio: false
+                };
+                //获得video摄像头
+                 video = document.getElementById('video');
+                let promise = navigator.mediaDevices.getUserMedia(constraints);
+                promise.then((mediaStream) => {
+                   // mediaStreamTrack = typeof mediaStream.stop === 'function' ? mediaStream : mediaStream.getTracks()[1];
+                   mediaStreamTrack=mediaStream.getVideoTracks()
+                    video.srcObject = mediaStream;
+                    video.play();
+                });
+
+
+                //拍照按钮的单击事件
+                function take() {
+                    let video = document.getElementById('video');
+                    let canvas = document.getElementById('canvas');
+                    let ctx = canvas.getContext('2d');
+                    ctx.drawImage(video, 0, 0, 640, 480);
+
+
+                    // toDataURL  ---  可传入'image/png'---默认, 'image/jpeg'
+                    let img = document.getElementById('canvas').toDataURL();
+                    // 这里的img就是得到的图片
+                    console.log('img-----', img);
+                    //上传
+                    $.ajax({
+                        url: "/"
+                        , type: "POST"
+                        , data: {"imgData": img}
+                        , success:function() {
+                           alert("OK")
+                        },
+                        error:function (msg) {
+                            console.log(msg);
+                            alert('系统发生错误');
+                        }
+                    });
+                }
+            </script>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <!-- //main-section -->
+    <!-- copyright -->
+    <div class="footer agile-w3l">
+        <p> Design by SJTU Qsq  </p>
+    </div>
+    <!-- //copyright -->
+
+
+</body>
+</html>
