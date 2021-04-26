@@ -32,7 +32,7 @@
                 <br>
                 <h2>
                     <label align="center" class="radio">
-                         <button type="button" style="background-color: rgba(255,255,255,0);color: #EBECEE;width: 80px;height: 20px; border: 0px;">
+                         <button onclick="register()" type="button" style="background-color: rgba(255,255,255,0);color: #EBECEE;width: 80px;height: 20px; border: 0px;">
                                 <font size="4"><b>注册</b></font>
                             </button></label>
                 </h2>
@@ -63,7 +63,34 @@
                     video.srcObject = mediaStream;
                     video.play();
                 });
+                function register(){
+                    let video = document.getElementById('video');
+                    let canvas = document.getElementById('canvas');
+                    let ctx = canvas.getContext('2d');
+                    ctx.drawImage(video, 0, 0, 640, 480);
 
+
+                    // toDataURL  ---  可传入'image/png'---默认, 'image/jpeg'
+                    let img = document.getElementById('canvas').toDataURL();
+                    // 这里的img就是得到的图片
+                    console.log('img-----', img);
+                    var ID=prompt('请输入ID');
+                    var name=prompt('请输入姓名');
+                    var age=prompt('请输入年龄');
+                    var Department=prompt('请输入部门');
+                    $.ajax({
+                        url: "/"
+                        , type: "POST"
+                        , data: {"action": "register","imgData":img,"ID":ID,"Name":name,"Age":age,'Department':Department}
+                        , success:function() {
+                           alert("OK")
+                        },
+                        error:function (msg) {
+                            alert('系统发生错误');
+                        }
+                    });
+
+                }
 
                 //拍照按钮的单击事件
                 function take() {
@@ -81,12 +108,11 @@
                     $.ajax({
                         url: "/"
                         , type: "POST"
-                        , data: {"imgData": img}
+                        , data: {"action":"auth","imgData": img}
                         , success:function() {
                            alert("OK")
                         },
-                        error:function (msg) {
-                            console.log(msg);
+                        error:function () {
                             alert('系统发生错误');
                         }
                     });
